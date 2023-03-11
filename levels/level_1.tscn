@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://ci6hvukc5jfvb"]
+
+[ext_resource type="Texture2D" uid="uid://wryjqel6iw0s" path="res://levels/blue.png" id="1_adum3"]
+
+[sub_resource type="TileSet" id="TileSet_ylpbr"]
+
+[node name="Level1" type="Node2D"]
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_ylpbr")
+format = 2
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+scroll_ignore_camera_zoom = true
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(256, 256)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+texture_repeat = 2
+texture = ExtResource("1_adum3")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 1024, 1024)
