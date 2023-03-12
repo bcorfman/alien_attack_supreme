@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wryjqel6iw0s"
-path="res://.godot/imported/blue.png-b9c2e6901db1f095f660be35186edccc.ctex"
+uid="uid://b1kfcf8ndon3i"
+path="res://.godot/imported/starfields_1024_2048_by_tbh_1138-d30dvm7-1888690340.png-0d3d62a2207f0029bb091147c50c0256.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://levels/blue.png"
-dest_files=["res://.godot/imported/blue.png-b9c2e6901db1f095f660be35186edccc.ctex"]
+source_file="res://levels/starfields_1024_2048_by_tbh_1138-d30dvm7-1888690340.png"
+dest_files=["res://.godot/imported/starfields_1024_2048_by_tbh_1138-d30dvm7-1888690340.png-0d3d62a2207f0029bb091147c50c0256.ctex"]
 
 [params]
 
