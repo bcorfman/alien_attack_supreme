@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://c0744stebbu1m"]
+[gd_scene load_steps=8 format=3 uid="uid://c0744stebbu1m"]
 
 [ext_resource type="Texture2D" uid="uid://b1kfcf8ndon3i" path="res://levels/starfields_1024_2048_by_tbh_1138-d30dvm7-1888690340.png" id="1_alyy3"]
 [ext_resource type="Script" path="res://levels/level_1.gd" id="1_hn71v"]
 [ext_resource type="Script" path="res://levels/starfield.gd" id="1_jqnee"]
 [ext_resource type="Texture2D" uid="uid://8ldybl7qpkpk" path="res://characters/sheet.png" id="3_y58ge"]
+[ext_resource type="Script" path="res://characters/player.gd" id="4_k354p"]
 
 [sub_resource type="TileSet" id="TileSet_ylpbr"]
 
@@ -34,6 +35,7 @@ region_rect = Rect2(0, 0, 894, 1080)
 
 [node name="Player" type="CharacterBody2D" parent="."]
 collision_mask = 2
+script = ExtResource("4_k354p")
 
 [node name="ShipSprite" type="Sprite2D" parent="Player"]
 scale = Vector2(0.75, 0.75)
