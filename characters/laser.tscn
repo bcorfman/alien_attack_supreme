@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=3 uid="uid://cw0tvjp2vfhfo"]
+
+[ext_resource type="Script" path="res://characters/laser.gd" id="1_p2de8"]
+[ext_resource type="Texture2D" uid="uid://8ldybl7qpkpk" path="res://characters/sheet.png" id="1_xrjeb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ee8gn"]
+atlas = ExtResource("1_xrjeb")
+region = Rect2(848, 684, 13, 54)
+
+[sub_resource type="Animation" id="Animation_tjf28"]
+resource_name = "shutdown"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_foo7k"]
+_data = {
+"shutdown": SubResource("Animation_tjf28")
+}
+
+[node name="Laser" type="RigidBody2D"]
+position = Vector2(0, 10)
+script = ExtResource("1_p2de8")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.75, 0.75)
+texture = SubResource("AtlasTexture_ee8gn")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+scale = Vector2(0.75, 0.75)
+polygon = PackedVector2Array(-4, 26, -7, -22, -2, -27, 1, -27, 6, -22, 4, 26)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_foo7k")
+}
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="disable"]

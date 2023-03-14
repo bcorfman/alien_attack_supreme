@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://c0744stebbu1m"]
+[gd_scene load_steps=9 format=3 uid="uid://c0744stebbu1m"]
 
 [ext_resource type="Texture2D" uid="uid://b1kfcf8ndon3i" path="res://levels/starfields_1024_2048_by_tbh_1138-d30dvm7-1888690340.png" id="1_alyy3"]
 [ext_resource type="Script" path="res://levels/level_1.gd" id="1_hn71v"]
 [ext_resource type="Script" path="res://levels/starfield.gd" id="1_jqnee"]
 [ext_resource type="Texture2D" uid="uid://8ldybl7qpkpk" path="res://characters/sheet.png" id="3_y58ge"]
 [ext_resource type="Script" path="res://characters/player.gd" id="4_k354p"]
+[ext_resource type="PackedScene" uid="uid://cw0tvjp2vfhfo" path="res://characters/laser.tscn" id="6_8wwgi"]
 
 [sub_resource type="TileSet" id="TileSet_ylpbr"]
 
@@ -37,12 +38,22 @@ region_rect = Rect2(0, 0, 894, 1080)
 collision_mask = 2
 script = ExtResource("4_k354p")
 
-[node name="ShipSprite" type="Sprite2D" parent="Player"]
+[node name="Ship" type="Sprite2D" parent="Player"]
 scale = Vector2(0.75, 0.75)
 texture = SubResource("AtlasTexture_7lnwp")
 flip_v = true
 region_rect = Rect2(325, -1, 98, 76)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Player"]
+[node name="ShipCollision" type="CollisionPolygon2D" parent="Player"]
 build_mode = 1
 polygon = PackedVector2Array(-20, -29, -10, -30, -8, -27, -13, -8, -11, -6, -8, -12, 9, -11, 11, -7, 13, -8, 8, -27, 11, -29, 12, -28, 17, -30, 34, 13, 22, 32, 7, 25, 6, 18, -7, 18, -8, 25, -22, 32, -35, 13)
+
+[node name="Laser" parent="Player" instance=ExtResource("6_8wwgi")]
+
+[node name="LaserCollision" type="CollisionPolygon2D" parent="Player"]
+build_mode = 1
+polygon = PackedVector2Array(-5, -20, 5, -20, 4, 21, -4, 21)
+
+[node name="LaserOrigin" type="Marker2D" parent="Player"]
+
+[node name="LaserSound" type="AudioStreamPlayer2D" parent="Player"]
