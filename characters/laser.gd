@@ -1,16 +1,15 @@
 class_name Laser
 extends RigidBody2D
 
-var disabled = false
+var parent_object
 
-# Called when the node enters the scene tree for the first time.
+@onready var sound = $Sound
+
 func _ready():
-	($Timer as Timer).start()
-
-
-func disable():
-	if disabled:
-		return
-		
-	($AnimationPlayer as AnimationPlayer).play("shutdown")
-	disabled = true
+	sound.play()
+	
+func _on_body_entered(_body):
+	parent_object.delete_shot(self)
+	queue_free()
+	hide()
+	print(parent_object.shots.size())

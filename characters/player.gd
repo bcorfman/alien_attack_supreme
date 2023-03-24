@@ -1,41 +1,44 @@
 class_name Player
-extends CharacterBody2D
-
+extends RigidBody2D
 
 const SHIP_SPEED = 300.0
 const LASER_SPEED = 500.0
-var firing = false
-var firing_time = 1e20
+var colliding
 var Laser = preload("res://characters/laser.tscn")
+var shots = []
 
-@onready var laser_origin = $LaserOrigin
-@onready var laser_sound = $LaserSound
-
-func _integrate_forces(s):
-	var step = s.get_step()
+@onready var laser_origin = $Laser/Origin
+@onready var timer: Timer = $Timer
 	
-	# A good idea when implementing characters of all kinds,
-	# compensates for physics imprecision, as well as human reaction delay.
+func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
+	var velocity := state.get_linear_velocity()
+	
 	var fire = Input.is_action_pressed("fire")
-	if fire and not firing:
-		call_deferred("_shot_laser")
-	else:
-		firing_time += step
+	if fire and timer.is_stopped():
+		call_deferred("_shoot_laser")
 		
 	var direction = Input.get_axis("move_left", "move_right")
 	if direction:
-		velocity.x = direction * SHIP_SPEED * step
+		velocity.x = direction * SHIP_SPEED 
 	else:
 		velocity.x = 0
-		
-	move_and_collide(velocity)
 	
-func _shot_laser():
-	firing_time = 0
-	var li = Laser.instance()
+	state.set_linear_velocity(velocity)
+
+func _shoot_laser():
+	var li = Laser.instantiate()
+	shots.append(li)
+	li.parent_object = self
+	li.visible = true
+	li.gravity_scale = 0
 	var pos = position + laser_origin.position * Vector2(0, -1.0)
 	li.position = pos
 	get_parent().add_child(li)
 	li.linear_velocity = Vector2(0, -LASER_SPEED)
-	laser_sound.play()
 	add_collision_exception_with(li)
+	timer.start()
+	
+func delete_shot(laser: Laser):
+	var index = shots.find(laser)
+	if index > -1:
+		shots.remove_at(index)
