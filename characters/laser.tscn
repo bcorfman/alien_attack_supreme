@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://cw0tvjp2vfhfo"]
+
+[ext_resource type="Script" path="res://characters/laser.gd" id="1_p2de8"]
+[ext_resource type="Texture2D" uid="uid://8ldybl7qpkpk" path="res://characters/sheet.png" id="1_xrjeb"]
+[ext_resource type="AudioStream" uid="uid://bsdmfxwdi6a7c" path="res://audio/laserSmall_000.ogg" id="2_ulo7e"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_055r0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ee8gn"]
+atlas = ExtResource("1_xrjeb")
+region = Rect2(848, 684, 13, 54)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pm3l5"]
+size = Vector2(13, 54)
+
+[node name="Laser" type="RigidBody2D"]
+position = Vector2(0, 10)
+collision_layer = 2
+collision_mask = 4
+physics_material_override = SubResource("PhysicsMaterial_055r0")
+max_contacts_reported = 1
+contact_monitor = true
+script = ExtResource("1_p2de8")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+scale = Vector2(0.75, 0.75)
+texture = SubResource("AtlasTexture_ee8gn")
+
+[node name="Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_ulo7e")
+volume_db = 22.955
+
+[node name="Origin" type="Marker2D" parent="."]
+position = Vector2(0, 10)
+scale = Vector2(0.75, 0.75)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_pm3l5")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

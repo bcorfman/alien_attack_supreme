@@ -1,15 +1,44 @@
-extends CharacterBody2D
+class_name Player
+extends RigidBody2D
 
+const SHIP_SPEED = 300.0
+const LASER_SPEED = 500.0
+var colliding
+var Laser = preload("res://characters/laser.tscn")
+var shots = []
 
-const SPEED = 300.0
-
-func _physics_process(delta):
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction = Input.get_axis("ui_left", "ui_right")
+@onready var laser_origin = $Laser/Origin
+@onready var timer: Timer = $Timer
+	
+func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
+	var velocity := state.get_linear_velocity()
+	
+	var fire = Input.is_action_pressed("fire")
+	if fire and timer.is_stopped():
+		call_deferred("_shoot_laser")
+		
+	var direction = Input.get_axis("move_left", "move_right")
 	if direction:
-		velocity.x = direction * SPEED * delta
+		velocity.x = direction * SHIP_SPEED 
 	else:
 		velocity.x = 0
-		
-	move_and_collide(velocity)
+	
+	state.set_linear_velocity(velocity)
+
+func _shoot_laser():
+	var li = Laser.instantiate()
+	shots.append(li)
+	li.parent_object = self
+	li.visible = true
+	li.gravity_scale = 0
+	var pos = position + laser_origin.position * Vector2(0, -1.0)
+	li.position = pos
+	get_parent().add_child(li)
+	li.linear_velocity = Vector2(0, -LASER_SPEED)
+	add_collision_exception_with(li)
+	timer.start()
+	
+func delete_shot(laser: Laser):
+	var index = shots.find(laser)
+	if index > -1:
+		shots.remove_at(index)
