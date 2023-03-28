@@ -7,7 +7,6 @@ var colliding
 var Laser = preload("res://characters/laser.tscn")
 var shots = []
 
-@onready var laser_origin = $Laser/Origin
 @onready var timer: Timer = $Timer
 	
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
@@ -31,7 +30,8 @@ func _shoot_laser():
 	li.parent_object = self
 	li.visible = true
 	li.gravity_scale = 0
-	var pos = position + laser_origin.position * Vector2(0, -1.0)
+	li.body_entered.connect(li.on_body_entered)
+	var pos = position + li.get_node("Origin").position * Vector2(0, -1.0)
 	li.position = pos
 	get_parent().add_child(li)
 	li.linear_velocity = Vector2(0, -LASER_SPEED)

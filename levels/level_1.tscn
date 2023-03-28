@@ -1,16 +1,16 @@
-[gd_scene load_steps=13 format=3 uid="uid://c0744stebbu1m"]
+[gd_scene load_steps=19 format=3 uid="uid://c0744stebbu1m"]
 
 [ext_resource type="Texture2D" uid="uid://b1kfcf8ndon3i" path="res://levels/starfields_1024_2048_by_tbh_1138-d30dvm7-1888690340.png" id="1_alyy3"]
 [ext_resource type="Script" path="res://levels/level_1.gd" id="1_hn71v"]
 [ext_resource type="Script" path="res://levels/starfield.gd" id="1_jqnee"]
 [ext_resource type="Texture2D" uid="uid://8ldybl7qpkpk" path="res://characters/sheet.png" id="3_y58ge"]
 [ext_resource type="Script" path="res://characters/player.gd" id="4_k354p"]
-[ext_resource type="PackedScene" uid="uid://cw0tvjp2vfhfo" path="res://characters/laser.tscn" id="6_8wwgi"]
+[ext_resource type="Script" path="res://characters/enemy.gd" id="7_2mhhg"]
 [ext_resource type="AudioStream" uid="uid://0x66rtbjdw7i" path="res://audio/1918.mp3" id="7_joqth"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_7lnwp"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_vcb3n"]
 atlas = ExtResource("3_y58ge")
-region = Rect2(425, 469, 93, 83)
+region = Rect2(221.742, -1.80725, 102.725, 84.9459)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4j31m"]
 size = Vector2(72, 60)
@@ -25,6 +25,55 @@ b = Vector2(700, 1080)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d4txa"]
 size = Vector2(720, 20)
+
+[sub_resource type="Animation" id="Animation_pppnu"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_wmml7"]
+resource_name = "cycle"
+length = 6.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:linear_velocity:x")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3, 6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [260.0, -260.0, 260.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:linear_velocity:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4, 5, 6),
+"transitions": PackedFloat32Array(0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1),
+"update": 0,
+"values": [80.0, -80.0, 80.0, -80.0, 80.0, -80.0, 80.0]
+}
+
+[sub_resource type="Animation" id="Animation_q8qqr"]
+resource_name = "explode"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_w1sd6"]
+_data = {
+"RESET": SubResource("Animation_pppnu"),
+"cycle": SubResource("Animation_wmml7"),
+"explode": SubResource("Animation_q8qqr")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0v7x7"]
+radius = 45.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7lnwp"]
+atlas = ExtResource("3_y58ge")
+region = Rect2(504.89, 898.107, 90.8724, 90.8723)
 
 [node name="Level1" type="Node2D"]
 script = ExtResource("1_hn71v")
@@ -50,15 +99,8 @@ max_contacts_reported = 4
 script = ExtResource("4_k354p")
 
 [node name="Ship" type="Sprite2D" parent="Player"]
-scale = Vector2(0.75, 0.75)
-texture = SubResource("AtlasTexture_7lnwp")
+texture = SubResource("AtlasTexture_vcb3n")
 flip_v = true
-region_rect = Rect2(325, -1, 98, 76)
-
-[node name="Laser" parent="Player" instance=ExtResource("6_8wwgi")]
-collision_mask = 12
-max_contacts_reported = 10
-script = null
 
 [node name="Timer" type="Timer" parent="Player"]
 wait_time = 0.5
@@ -98,3 +140,28 @@ debug_color = Color(0.470588, 0.490196, 0.862745, 1)
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("7_joqth")
 autoplay = true
+
+[node name="Enemy1" type="RigidBody2D" parent="."]
+collision_layer = 8
+collision_mask = 4
+custom_integrator = true
+max_contacts_reported = 4
+linear_velocity = Vector2(260, 80)
+script = ExtResource("7_2mhhg")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Enemy1"]
+autoplay = "cycle"
+libraries = {
+"": SubResource("AnimationLibrary_w1sd6")
+}
+
+[node name="Enemy1Collision" type="CollisionShape2D" parent="Enemy1"]
+shape = SubResource("CircleShape2D_0v7x7")
+
+[node name="Ship" type="Sprite2D" parent="Enemy1"]
+scale = Vector2(0.75, 0.75)
+texture = SubResource("AtlasTexture_7lnwp")
+flip_v = true
+region_rect = Rect2(325, -1, 98, 76)
+
+[connection signal="body_entered" from="Enemy1" to="Enemy1" method="_on_body_entered"]

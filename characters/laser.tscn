@@ -16,7 +16,7 @@ size = Vector2(13, 54)
 [node name="Laser" type="RigidBody2D"]
 position = Vector2(0, 10)
 collision_layer = 2
-collision_mask = 4
+collision_mask = 12
 physics_material_override = SubResource("PhysicsMaterial_055r0")
 max_contacts_reported = 1
 contact_monitor = true
@@ -34,7 +34,5 @@ volume_db = 22.955
 position = Vector2(0, 10)
 scale = Vector2(0.75, 0.75)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="LaserCollision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_pm3l5")
-
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
