@@ -10,7 +10,8 @@ func _ready():
 	
 func on_body_entered(body):
 	parent_object.delete_shot(self)
-	queue_free()
 	hide()
+	queue_free()
 	if body.name == "Enemy1":
-		body.get_node("AnimationPlayer").play("explode")
+		body.get_node("AnimationPlayer").stop(true)
+		body.start_explosions(body.position, body.get_node("Ship").get_rect().size.x)

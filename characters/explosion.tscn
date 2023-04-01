@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://dq5oct0wssrar"]
+[gd_scene load_steps=12 format=3 uid="uid://dq5oct0wssrar"]
 
 [ext_resource type="Texture2D" uid="uid://crpca1xw46xx1" path="res://characters/16x16_scifi_Denzi100214-1.PNG" id="1_53qte"]
 [ext_resource type="Script" path="res://characters/explosion.gd" id="2_343b5"]
+[ext_resource type="AudioStream" uid="uid://dp5llib1uennh" path="res://audio/lowFrequency_explosion_001.ogg" id="3_xtxkh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nx60q"]
 atlas = ExtResource("1_53qte")
@@ -57,14 +58,17 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 12.0
+"speed": 8.0
 }]
 
 [node name="Explosion" type="AnimatedSprite2D"]
+top_level = true
+visibility_layer = 16
+scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_morns")
-frame = 6
-frame_progress = 1.0
-offset = Vector2(100, 100)
+centered = false
 script = ExtResource("2_343b5")
 
 [node name="Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_xtxkh")
+volume_db = 24.0
