@@ -1,0 +1,74 @@
+[gd_scene load_steps=12 format=3 uid="uid://dq5oct0wssrar"]
+
+[ext_resource type="Texture2D" uid="uid://crpca1xw46xx1" path="res://characters/16x16_scifi_Denzi100214-1.PNG" id="1_53qte"]
+[ext_resource type="Script" path="res://characters/explosion.gd" id="2_343b5"]
+[ext_resource type="AudioStream" uid="uid://dp5llib1uennh" path="res://audio/lowFrequency_explosion_001.ogg" id="3_xtxkh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nx60q"]
+atlas = ExtResource("1_53qte")
+region = Rect2(753, 529, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gdob2"]
+atlas = ExtResource("1_53qte")
+region = Rect2(784, 529, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iliig"]
+atlas = ExtResource("1_53qte")
+region = Rect2(815, 529, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fnnky"]
+atlas = ExtResource("1_53qte")
+region = Rect2(846, 529, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v7hrh"]
+atlas = ExtResource("1_53qte")
+region = Rect2(753, 577, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xu2xq"]
+atlas = ExtResource("1_53qte")
+region = Rect2(784, 577, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wdmdx"]
+atlas = ExtResource("1_53qte")
+region = Rect2(815, 577, 31, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_morns"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nx60q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gdob2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iliig")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fnnky")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v7hrh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xu2xq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wdmdx")
+}],
+"loop": false,
+"name": &"default",
+"speed": 8.0
+}]
+
+[node name="Explosion" type="AnimatedSprite2D"]
+top_level = true
+visibility_layer = 16
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_morns")
+centered = false
+script = ExtResource("2_343b5")
+
+[node name="Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_xtxkh")
+volume_db = 24.0
