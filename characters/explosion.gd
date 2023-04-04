@@ -1,4 +1,4 @@
-extends AnimatedSprite2D
+extends RigidBody2D
 
 @onready var sound = $Sound
 
