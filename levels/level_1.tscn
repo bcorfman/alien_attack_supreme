@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://c0744stebbu1m"]
+[gd_scene load_steps=29 format=3 uid="uid://c0744stebbu1m"]
 
 [ext_resource type="Texture2D" uid="uid://b1kfcf8ndon3i" path="res://levels/starfields_1024_2048_by_tbh_1138-d30dvm7-1888690340.png" id="1_alyy3"]
 [ext_resource type="Script" path="res://levels/level_1.gd" id="1_hn71v"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://characters/player.gd" id="4_k354p"]
 [ext_resource type="Script" path="res://characters/enemy.gd" id="7_2mhhg"]
 [ext_resource type="AudioStream" uid="uid://0x66rtbjdw7i" path="res://audio/1918.mp3" id="7_joqth"]
+[ext_resource type="Texture2D" uid="uid://crpca1xw46xx1" path="res://characters/16x16_scifi_Denzi100214-1.PNG" id="9_3ra44"]
+[ext_resource type="AudioStream" uid="uid://dp5llib1uennh" path="res://audio/lowFrequency_explosion_001.ogg" id="10_2fgpy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vcb3n"]
 atlas = ExtResource("3_y58ge")
@@ -74,6 +76,63 @@ radius = 45.0
 [sub_resource type="AtlasTexture" id="AtlasTexture_7lnwp"]
 atlas = ExtResource("3_y58ge")
 region = Rect2(504.89, 898.107, 90.8724, 90.8723)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nx60q"]
+atlas = ExtResource("9_3ra44")
+region = Rect2(753, 529, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gdob2"]
+atlas = ExtResource("9_3ra44")
+region = Rect2(784, 529, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iliig"]
+atlas = ExtResource("9_3ra44")
+region = Rect2(815, 529, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fnnky"]
+atlas = ExtResource("9_3ra44")
+region = Rect2(846, 529, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v7hrh"]
+atlas = ExtResource("9_3ra44")
+region = Rect2(753, 577, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xu2xq"]
+atlas = ExtResource("9_3ra44")
+region = Rect2(784, 577, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wdmdx"]
+atlas = ExtResource("9_3ra44")
+region = Rect2(815, 577, 31, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_morns"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nx60q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gdob2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iliig")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fnnky")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v7hrh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xu2xq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wdmdx")
+}],
+"loop": false,
+"name": &"default",
+"speed": 8.0
+}]
 
 [node name="Level1" type="Node2D"]
 script = ExtResource("1_hn71v")
@@ -144,8 +203,8 @@ autoplay = true
 [node name="Enemy1" type="RigidBody2D" parent="."]
 collision_layer = 8
 collision_mask = 4
-custom_integrator = true
-max_contacts_reported = 4
+gravity_scale = 0.0
+max_contacts_reported = 1
 linear_velocity = Vector2(260, 80)
 script = ExtResource("7_2mhhg")
 
@@ -164,4 +223,54 @@ texture = SubResource("AtlasTexture_7lnwp")
 flip_v = true
 region_rect = Rect2(325, -1, 98, 76)
 
-[connection signal="body_entered" from="Enemy1" to="Enemy1" method="_on_body_entered"]
+[node name="Explosion1" type="AnimatedSprite2D" parent="Enemy1/Ship"]
+visible = false
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_morns")
+frame = 4
+
+[node name="Explosion2" type="AnimatedSprite2D" parent="Enemy1/Ship"]
+visible = false
+visibility_layer = 16
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_morns")
+
+[node name="Explosion3" type="AnimatedSprite2D" parent="Enemy1/Ship"]
+visible = false
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_morns")
+
+[node name="Explosion4" type="AnimatedSprite2D" parent="Enemy1/Ship"]
+visible = false
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_morns")
+
+[node name="Explosion5" type="AnimatedSprite2D" parent="Enemy1/Ship"]
+visible = false
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_morns")
+
+[node name="ExplosionSound1" type="AudioStreamPlayer2D" parent="Enemy1"]
+scale = Vector2(2, 2)
+stream = ExtResource("10_2fgpy")
+volume_db = 24.0
+
+[node name="ExplosionSound2" type="AudioStreamPlayer2D" parent="Enemy1"]
+scale = Vector2(4, 4)
+stream = ExtResource("10_2fgpy")
+volume_db = 24.0
+
+[node name="ExplosionSound3" type="AudioStreamPlayer2D" parent="Enemy1"]
+scale = Vector2(16, 16)
+stream = ExtResource("10_2fgpy")
+volume_db = 24.0
+
+[node name="ExplosionSound4" type="AudioStreamPlayer2D" parent="Enemy1"]
+scale = Vector2(4, 4)
+stream = ExtResource("10_2fgpy")
+volume_db = 24.0
+
+[node name="ExplosionSound5" type="AudioStreamPlayer2D" parent="Enemy1"]
+scale = Vector2(4, 4)
+stream = ExtResource("10_2fgpy")
+volume_db = 24.0

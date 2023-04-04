@@ -1,0 +1,112 @@
+[gd_scene load_steps=13 format=3 uid="uid://bk3rfjq7qveqq"]
+
+[ext_resource type="Script" path="res://characters/explosion.gd" id="1_nsdm6"]
+[ext_resource type="Texture2D" uid="uid://crpca1xw46xx1" path="res://characters/16x16_scifi_Denzi100214-1.PNG" id="2_sm52h"]
+[ext_resource type="AudioStream" uid="uid://dp5llib1uennh" path="res://audio/lowFrequency_explosion_001.ogg" id="3_ha33j"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nx60q"]
+atlas = ExtResource("2_sm52h")
+region = Rect2(753, 529, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gdob2"]
+atlas = ExtResource("2_sm52h")
+region = Rect2(784, 529, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iliig"]
+atlas = ExtResource("2_sm52h")
+region = Rect2(815, 529, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fnnky"]
+atlas = ExtResource("2_sm52h")
+region = Rect2(846, 529, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v7hrh"]
+atlas = ExtResource("2_sm52h")
+region = Rect2(753, 577, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xu2xq"]
+atlas = ExtResource("2_sm52h")
+region = Rect2(784, 577, 31, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wdmdx"]
+atlas = ExtResource("2_sm52h")
+region = Rect2(815, 577, 31, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_morns"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nx60q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gdob2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iliig")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fnnky")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v7hrh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xu2xq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wdmdx")
+}],
+"loop": false,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_boyko"]
+
+[node name="Explosions" type="RigidBody2D"]
+gravity_scale = 0.0
+script = ExtResource("1_nsdm6")
+
+[node name="Sprite1" type="AnimatedSprite2D" parent="."]
+visible = false
+top_level = true
+visibility_layer = 16
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_morns")
+
+[node name="Sprite2" type="AnimatedSprite2D" parent="."]
+visible = false
+top_level = true
+visibility_layer = 16
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_morns")
+
+[node name="Sprite3" type="AnimatedSprite2D" parent="."]
+visible = false
+top_level = true
+visibility_layer = 16
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_morns")
+
+[node name="Sprite4" type="AnimatedSprite2D" parent="."]
+visible = false
+top_level = true
+visibility_layer = 16
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_morns")
+
+[node name="Sprite5" type="AnimatedSprite2D" parent="."]
+visible = false
+top_level = true
+visibility_layer = 16
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_morns")
+
+[node name="Sound" type="AudioStreamPlayer2D" parent="."]
+scale = Vector2(2, 2)
+stream = ExtResource("3_ha33j")
+volume_db = 24.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_boyko")
+disabled = true
