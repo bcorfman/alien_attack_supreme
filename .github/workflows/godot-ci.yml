@@ -2,7 +2,7 @@ name: "godot-ci export"
 on: push
 
 env:
-  GODOT_VERSION: 4.0
+  GODOT_VERSION: "4.0"
   EXPORT_NAME: alien-attack-supreme
   PROJECT_PATH: alien-attack-supreme
   
