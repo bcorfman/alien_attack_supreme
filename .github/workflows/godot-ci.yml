@@ -39,7 +39,12 @@ jobs:
 
 
     steps:
-
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT }}
       - uses: actions/checkout@v3
 
       - run: mkdir -p godot/"$(dirname '${{ matrix.path }}')"
