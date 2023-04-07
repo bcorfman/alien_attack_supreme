@@ -29,12 +29,12 @@ jobs:
 
       - run: mkdir -p godot/"$(dirname '${{ matrix.path }}')"
 
-      - run: docker build -t ghcr.io/itsas-taldea/godot/export container
+      - run: docker build -t ghcr.io/bcorfman/godot/export container
 
       - run: >-
           docker run --rm
           -v $(pwd):/wrk -w /wrk/godot
-          ghcr.io/itsas-taldea/godot/export
+          ghcr.io/bcorfman/godot/export
           gexport --export-release '${{ matrix.preset }}' '${{ matrix.path }}'
 
       - name: '📤 Upload artifact'
