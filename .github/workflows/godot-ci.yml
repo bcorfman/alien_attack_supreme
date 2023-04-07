@@ -25,7 +25,9 @@ jobs:
             echo '${{ github.token }}' | docker login ghcr.io -u bcorfman --password-stdin
             docker push ghcr.io/bcorfman/godot/export
           post: docker logout ghcr.io
+  
   build:
+    needs: container
     runs-on: ubuntu-latest
     name: ${{ matrix.name }}
     strategy:
@@ -44,13 +46,11 @@ jobs:
 
       - run: mkdir -p godot/"$(dirname '${{ matrix.path }}')"
 
-      - run: docker build -t ghcr.io/bcorfman/godot/export container
-
-      - run: >-
-          docker run --rm
-          -v $(pwd):/wrk -w /wrk/godot
-          ghcr.io/bcorfman/godot/export
-          gexport --export-release '${{ matrix.preset }}' '${{ matrix.path }}'
+      - uses: docker://ghcr.io/bcorfman/godot/export
+        env:
+          GODOT_EXPORT_SUBDIR: godot
+        with:
+          args: gexport --export-release ${{ matrix.name }} ${{ matrix.path }}
 
       - name: '📤 Upload artifact'
         uses: 'actions/upload-artifact@v3'
