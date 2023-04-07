@@ -8,7 +8,6 @@ env:
   DOCKER_BUILDKIT: 1
 
 jobs:
-
   container:
     runs-on: ubuntu-latest
 
