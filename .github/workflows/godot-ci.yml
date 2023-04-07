@@ -16,14 +16,13 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - run: docker build -t ghcr.io/mimetyx/godot/export container
-
+      - run: docker build -t ghcr.io/bcorfman/godot/export container
       - name: Push to ghcr.io
         uses: pyTooling/Actions/with-post-step@r0
         with:
           main: |
-            echo '${{ github.token }}' | docker login ghcr.io -u bcorfman --password-stdin
-            docker push ghcr.io/mimetyx/godot/export
+            echo '${{ secrets.PAT }}' | docker login ghcr.io -u bcorfman --password-stdin
+            docker push ghcr.io/bcorfman/godot/export
           post: docker logout ghcr.io
   
   build:
@@ -46,7 +45,7 @@ jobs:
 
       - run: mkdir -p godot/"$(dirname '${{ matrix.path }}')"
 
-      - uses: docker://ghcr.io/mimetyx/godot/export
+      - uses: docker://ghcr.io/bcorfman/godot/export
         env:
           GODOT_EXPORT_SUBDIR: godot
         with:
