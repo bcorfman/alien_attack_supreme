@@ -33,8 +33,6 @@ jobs:
 
     permissions:
       packages: write
-    #        path: ./dist/html5/index.html
-    #        upload: godot/dist/html5/*
 
     steps:
       - name: Checkout git repo
@@ -52,7 +50,7 @@ jobs:
         env:
           GODOT_EXPORT_SUBDIR: godot
         with:
-          args: gexport --export-release ${{ matrix.name }} ${{ matrix.path }}
+          args: gexport --export-release HTML5 ./dist/html5/index.html
       - name: '📤 Upload artifact'
         uses: 'actions/upload-artifact@v3'
         with:
