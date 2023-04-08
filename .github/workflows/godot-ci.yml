@@ -62,37 +62,14 @@ jobs:
 
 
   pages:
-    needs:
-      - build
+    needs: build
     runs-on: ubuntu-latest
     steps:
-
-      - uses: actions/checkout@v3
-
-      - name: '📥 Download artifacts: Web'
-        uses: actions/download-artifact@v3
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v3
         with:
-          name: Web
-          path: public/play
-
-      - run: tree public
-
-      # Workaround for SharedArrayBuffer support on GitHub Pages
-      # See: https://github.com/godotengine/godot-docs/issues/7084
-      - run: |
-          cd public/play
-          curl -fsSL https://github.com/gzuidhof/coi-serviceworker/raw/master/coi-serviceworker.js > coi-serviceworker.js
-          sed -i 's#\(		<script src="index.js"></script>\)#		<script src="coi-serviceworker.js"></script>\n\1#g' index.html
-
-      - name: 🚀 Publish to GitHub Pages
-        if: (github.event_name != 'pull_request')
-        run: |
-          cd public
-          touch .nojekyll
-          git init
-          cp ../.git/config ./.git/config
-          git add .
-          git config --local user.email "godot@GitHubActions"
-          git config --local user.name "GitHub Actions"
-          git commit -a -m "update ${{ github.sha }}"
-          git push -u origin +HEAD:gh-pages
+          target_branch: gh-pages
+          build_dir: godot/dist/web
+        env:
+            GITHUB_TOKEN: ${{ secrets.PAT }}
