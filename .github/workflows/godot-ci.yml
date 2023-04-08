@@ -40,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: mkdir -p godot/"$(dirname '${{ matrix.path }}')"
-      - uses: docker://ghcr.io/'${{ github.actor }}'/godot/export
+      - uses: "docker://ghcr.io/'${{ github.actor }}'/godot/export"
         env:
           GODOT_EXPORT_SUBDIR: godot
         with:
