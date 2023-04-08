@@ -32,15 +32,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - path: ./dist/html5/index.html
-            name: HTML5
+          - name: HTML5
+            path: ./dist/html5/index.html
             upload: godot/dist/html5/*
 
-
     steps:
+
       - uses: actions/checkout@v3
       - run: mkdir -p godot/"$(dirname '${{ matrix.path }}')"
-      - uses: "docker://ghcr.io/'${{ github.actor }}'/godot/export"
+      - uses: docker://ghcr.io/bcorfman/godot/export
         env:
           GODOT_EXPORT_SUBDIR: godot
         with:
