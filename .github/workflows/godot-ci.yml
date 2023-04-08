@@ -18,7 +18,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.PAT }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Checkout code from git
         uses: actions/checkout@v3
       - name: Build and push to GHCR
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      packages: read
+      packages: write
     #        path: ./dist/html5/index.html
     #        upload: godot/dist/html5/*
 
@@ -44,7 +44,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.PAT }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: make HTML directory
         run: mkdir -p godot/"$(dirname .dist/html5/index.html)"
       - name: Export game to web version
