@@ -53,6 +53,12 @@ jobs:
           GODOT_EXPORT_SUBDIR: godot
         with:
           args: gexport --export-release Web ./dist/web/index.html
+      - name: "Workaround for SharedArrayBuffer support on GitHub Pages"
+        run: |
+          cd godot/dist/web
+          curl -fsSL https://github.com/gzuidhof/coi-serviceworker/raw/master/coi-serviceworker.js > coi-serviceworker.js
+          sed -i 's#\(		<script src="index.js"></script>\)#		<script src="coi-serviceworker.js"></script>\n\1#g' index.html
+          cd ../../..
       - name: '📤 Upload artifact'
         uses: 'actions/upload-artifact@v3'
         with:
@@ -66,4 +72,4 @@ jobs:
           target_branch: gh-pages
           build_dir: godot/dist/web
         env:
-            GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
