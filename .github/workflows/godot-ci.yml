@@ -59,17 +59,11 @@ jobs:
           name: Web
           path: godot/dist/web/*
           if-no-files-found: error
-
-
-  pages:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
       - name: Deploy to GitHub Pages
         if: success()
         uses: crazy-max/ghaction-github-pages@v3
         with:
           target_branch: gh-pages
-          build_dir: dist/web
+          build_dir: godot/dist/web
         env:
             GITHUB_TOKEN: ${{ secrets.PAT }}
