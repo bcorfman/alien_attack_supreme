@@ -20,7 +20,7 @@ jobs:
         uses: pyTooling/Actions/with-post-step@r0
         with:
           main: |
-            echo '${{ secrets.GITHUB_TOKEN }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo '${{ secrets.PAT }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker push ghcr.io/${{ github.actor }}/godot/export
           post: docker logout ghcr.io
   
