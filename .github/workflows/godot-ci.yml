@@ -4,43 +4,51 @@ on:
   push:
   pull_request:
 
-env:
-  DOCKER_BUILDKIT: 1
-
 jobs:
   make-container:
+    name: Make Docker container with Godot
     runs-on: ubuntu-latest
 
+    permissions:
+      packages: write
+    
     steps:
-
-      - uses: actions/checkout@v3
-
-      - run: docker build -t ghcr.io/${{ github.actor }}/godot/export container
-      - name: Push to ghcr.io
-        uses: pyTooling/Actions/with-post-step@r0
+      - name: Login to ghcr.io registry
+        uses: docker/login-action@v2
         with:
-          main: |
-            echo '${{ secrets.PAT }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker push ghcr.io/${{ github.actor }}/godot/export
-          post: docker logout ghcr.io
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT }}
+      - name: Checkout code from git
+        uses: actions/checkout@v3
+      - name: Build and push to GHCR
+        run: |
+          docker build -t ghcr.io/${{ github.actor }}/godot/export container 
+          docker push ghcr.io/${{ github.actor }}/godot/export
   
   build:
-    needs: make-container
+    name: Build Godot game as Web version
+    needs: [make-container]
     runs-on: ubuntu-latest
-    name: ${{ matrix.name }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: HTML5
-            path: ./dist/html5/index.html
-            upload: godot/dist/html5/*
+
+    permissions:
+      packages: read
+    #        path: ./dist/html5/index.html
+    #        upload: godot/dist/html5/*
 
     steps:
-
-      - uses: actions/checkout@v3
-      - run: mkdir -p godot/"$(dirname '${{ matrix.path }}')"
-      - uses: docker://ghcr.io/bcorfman/godot/export:latest
+      - name: Checkout git repo
+        uses: actions/checkout@v3
+      - name: Login to ghcr.io registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT }}
+      - name: make HTML directory
+        run: mkdir -p godot/"$(dirname .dist/html5/index.html)"
+      - name: Export game to web version
+        uses: docker://ghcr.io/bcorfman/godot/export:latest
         env:
           GODOT_EXPORT_SUBDIR: godot
         with:
@@ -48,8 +56,8 @@ jobs:
       - name: '📤 Upload artifact'
         uses: 'actions/upload-artifact@v3'
         with:
-          name: ${{ matrix.name }}
-          path: ${{ matrix.upload }}
+          name: HTML5
+          path: godot/dist/html5/*
           if-no-files-found: error
 
 
