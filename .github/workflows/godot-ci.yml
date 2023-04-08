@@ -22,6 +22,7 @@ jobs:
           main: |
             echo '${{ secrets.PAT }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker push ghcr.io/${{ github.actor }}/godot/export
+          post: docker logout ghcr.io
   
   build:
     container:
@@ -49,6 +50,7 @@ jobs:
           main: |
             echo '${{ secrets.PAT }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker push ghcr.io/${{ github.actor }}/godot/export
+          post: docker logout ghcr.io
       - name: mkdir  
         run: mkdir -p godot/"$(dirname '${{ matrix.path }}')"
       - name: gexport
