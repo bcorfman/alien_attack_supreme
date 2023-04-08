@@ -46,7 +46,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PAT }}
       - name: make web directory
-        run: mkdir -p godot/"$(dirname .dist/web/index.html)"
+        run: mkdir -p ./dist/web
       - name: Export game to web version
         uses: docker://ghcr.io/bcorfman/godot/export:latest
         env:
