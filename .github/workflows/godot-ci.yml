@@ -29,10 +29,21 @@ jobs:
           docker push ghcr.io/${{ github.actor }}/godot/export
   
   build:
-    name: Build Godot game as Web version
     needs: [make-container]
     runs-on: ubuntu-latest
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
 
+          - name: Web
+            path: ./dist/web/index.html
+            upload: godot/dist/web/*
+
+          - name: macOS
+            path: ./dist/mac/moon.macos.zip
+            upload: godot/dist/mac/*
     permissions:
       packages: write
 
@@ -45,28 +56,29 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.PAT }}
-      - name: make web directory
-        run: mkdir -p godot/dist/web
+      - name: make distribution directory 
+        run: mkdir -p godot/"$(dirname '${{ matrix.path }}')"
       - name: Export game to web version
         uses: docker://ghcr.io/bcorfman/godot/export:latest
         env:
           GODOT_EXPORT_SUBDIR: godot
         with:
-          args: gexport --export-release Web ./dist/web/index.html
+          args: gexport --export-release ${{ matrix.name }} ${{ matrix.path}}
       - name: "Workaround for SharedArrayBuffer support on GitHub Pages"
+        if: matrix.name == 'Web'
         run: |
-          cd godot/dist/web
+          cd godot/"$(dirname '${{ matrix.path }}')"
           curl -fsSL https://github.com/gzuidhof/coi-serviceworker/raw/master/coi-serviceworker.js > coi-serviceworker.js
           sed -i 's#\(		<script src="index.js"></script>\)#		<script src="coi-serviceworker.js"></script>\n\1#g' index.html
           cd ../../..
       - name: '📤 Upload artifact'
         uses: 'actions/upload-artifact@v3'
         with:
-          name: Web
-          path: godot/dist/web/*
+          name: ${{ matrix.name }}
+          path: ${{ matrix.upload }}
           if-no-files-found: error
       - name: Deploy to GitHub Pages
-        if: success()
+        if: success() && (matrix.name == 'Web')
         uses: crazy-max/ghaction-github-pages@v3
         with:
           target_branch: gh-pages
