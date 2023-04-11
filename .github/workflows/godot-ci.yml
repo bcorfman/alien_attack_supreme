@@ -78,7 +78,7 @@ jobs:
           path: ${{ matrix.upload }}
           if-no-files-found: error
       - name: Deploy to GitHub Pages
-        if: success() and (matrix.name == 'Web')
+        if: success() && (matrix.name == 'Web')
         uses: crazy-max/ghaction-github-pages@v3
         with:
           target_branch: gh-pages
