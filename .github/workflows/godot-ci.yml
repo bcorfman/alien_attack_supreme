@@ -77,6 +77,12 @@ jobs:
           name: ${{ matrix.name }}
           path: ${{ matrix.upload }}
           if-no-files-found: error
+      - name: Upload assets to a Release
+        if: matrix.name != 'Web'
+        uses: AButler/upload-release-assets@v2.0.2
+        with:
+          files: ${{ matrix.path }}
+          repo-token: ${{ secrets.PAT }}
       - name: Deploy to GitHub Pages
         if: success() && (matrix.name == 'Web')
         uses: crazy-max/ghaction-github-pages@v3
