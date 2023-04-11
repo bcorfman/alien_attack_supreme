@@ -82,6 +82,6 @@ jobs:
         uses: crazy-max/ghaction-github-pages@v3
         with:
           target_branch: gh-pages
-          build_dir: godot/"$(dirname '${{ matrix.path }}')"
+          build_dir: godot/dist/web
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
