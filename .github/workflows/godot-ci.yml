@@ -65,6 +65,7 @@ jobs:
         with:
           args: gexport --export-release ${{ matrix.name }} ${{ matrix.path}}
       - name: "Workaround for SharedArrayBuffer support on GitHub Pages"
+        if: matrix.name == 'Web'
         run: |
           cd godot/"$(dirname '${{ matrix.path }}')"
           curl -fsSL https://github.com/gzuidhof/coi-serviceworker/raw/master/coi-serviceworker.js > coi-serviceworker.js
@@ -77,7 +78,7 @@ jobs:
           path: ${{ matrix.upload }}
           if-no-files-found: error
       - name: Deploy to GitHub Pages
-        if: success()
+        if: success() and (matrix.name == 'Web')
         uses: crazy-max/ghaction-github-pages@v3
         with:
           target_branch: gh-pages
