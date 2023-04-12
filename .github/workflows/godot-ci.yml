@@ -1,93 +1,56 @@
-name: Pipeline
+name: Godot-CI Export
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
+
+env:
+  GODOT_VERSION: 4.0.2
+  EXPORT_NAME: alien_attack_supreme
 
 jobs:
-  make-container:
-    name: Make Docker container with Godot
+  export-windows:
+    name: Windows Export
     runs-on: ubuntu-latest
-
-    permissions:
-      packages: write
-    
-    steps:
-      - name: Login to ghcr.io registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.PAT }}
-      - name: Checkout code from git
-        uses: actions/checkout@v3
-      - name: Build and push to GHCR
-        run: |
-          docker build -t ghcr.io/${{ github.actor }}/godot/export container 
-          docker push ghcr.io/${{ github.actor }}/godot/export
-  
-  build:
-    needs: [make-container]
-    runs-on: ubuntu-latest
-    name: ${{ matrix.name }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-
-          - name: Web
-            path: ./dist/web/index.html
-            upload: godot/dist/web/*
-
-          - name: macOS
-            path: ./dist/mac/moon.macos.zip
-            upload: godot/dist/mac/*
-    permissions:
-      packages: write
-
+    container:
+      image: docker://barichello/godot-ci:${{ env.GODOT_VERSION }}
     steps:
       - name: Checkout git repo
         uses: actions/checkout@v3
-      - name: Login to ghcr.io registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.PAT }}
-      - name: make distribution directory 
-        run: mkdir -p godot/"$(dirname '${{ matrix.path }}')"
-      - name: Export game to web version
-        uses: docker://ghcr.io/bcorfman/godot/export:latest
-        env:
-          GODOT_EXPORT_SUBDIR: godot
-        with:
-          args: gexport --export-release ${{ matrix.name }} ${{ matrix.path}}
-      - name: "Workaround for SharedArrayBuffer support on GitHub Pages"
-        if: matrix.name == 'Web'
+      - name: Setup
         run: |
-          cd godot/"$(dirname '${{ matrix.path }}')"
-          curl -fsSL https://github.com/gzuidhof/coi-serviceworker/raw/master/coi-serviceworker.js > coi-serviceworker.js
-          sed -i 's#\(		<script src="index.js"></script>\)#		<script src="coi-serviceworker.js"></script>\n\1#g' index.html
-          cd ../../..
-      - name: '📤 Upload artifact'
-        uses: 'actions/upload-artifact@v3'
-        with:
-          name: ${{ matrix.name }}
-          path: ${{ matrix.upload }}
-          if-no-files-found: error
-      - name: Upload assets to a Release
-        if: matrix.name != 'Web'
-        uses: AButler/upload-release-assets@v2.0.2
-        with:
-          files: ${{ matrix.path }}
-          repo-token: ${{ secrets.PAT }}
-      - name: Deploy to GitHub Pages
-        if: success() && (matrix.name == 'Web')
-        uses: crazy-max/ghaction-github-pages@v3
-        with:
-          target_branch: gh-pages
-          build_dir: godot/dist/web
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          mkdir -v -p build/linux build/windows build/mac build/web ~/.local/share/godot/templates
+          mv /root/.local/share/godot/templates/${{ env.GODOT_VERSION }}.stable ~/.local/share/godot/templates/${{ env.GODOT_VERSION }}.stable
+
+      #- name: Export game to web version
+      #  uses: docker://ghcr.io/bcorfman/godot/export:latest
+      #  env:
+      #    GODOT_EXPORT_SUBDIR: godot
+      #  with:
+      #    args: gexport --export-release ${{ matrix.name }} ${{ matrix.path}}
+      #- name: "Workaround for SharedArrayBuffer support on GitHub Pages"
+      #  if: matrix.name == 'Web'
+      #  run: |
+      #    cd godot/"$(dirname '${{ matrix.path }}')"
+      #    curl -fsSL https://github.com/gzuidhof/coi-serviceworker/raw/master/coi-serviceworker.js > coi-serviceworker.js
+      #    sed -i 's#\(		<script src="index.js"></script>\)#		<script src="coi-serviceworker.js"></script>\n\1#g' index.html
+      #    cd ../../..
+      #- name: '📤 Upload artifact'
+      #  uses: 'actions/upload-artifact@v3'
+      #  with:
+      #    name: ${{ matrix.name }}
+      #    path: ${{ matrix.upload }}
+      #    if-no-files-found: error
+      #- name: Upload assets to a Release
+      #  if: matrix.name != 'Web'
+      #  uses: AButler/upload-release-assets@v2.0.2
+      #  with:
+      #    files: ${{ matrix.path }}
+      #    repo-token: ${{ secrets.PAT }}
+      #- name: Deploy to GitHub Pages
+      #  if: success() && (matrix.name == 'Web')
+      #  uses: crazy-max/ghaction-github-pages@v3
+      #  with:
+      #    target_branch: gh-pages
+      #    build_dir: godot/dist/web
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.PAT }}
