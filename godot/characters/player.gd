@@ -12,11 +12,11 @@ var shots = []
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	var velocity := state.get_linear_velocity()
 	
-	var fire = Input.is_action_pressed("fire")
+	var fire = Input.is_action_pressed(&"fire")
 	if fire and timer.is_stopped():
 		call_deferred("_shoot_laser")
 		
-	var direction = Input.get_axis("ui_left", "ui_right")
+	var direction = Input.get_axis(&"move_left", &"move_right")
 	if direction:
 		velocity.x = direction * SHIP_SPEED 
 	else:
