@@ -12,14 +12,14 @@ jobs:
     name: Windows Export
     runs-on: ubuntu-latest
     container:
-      image: docker://barichello/godot-ci:$(GODOT_VERSION)
+      image: docker://barichello/godot-ci:${{ GODOT_VERSION }}
     steps:
       - name: Checkout git repo
         uses: actions/checkout@v3
       - name: Setup
         run: |
           mkdir -v -p build/linux build/windows build/mac build/web ~/.local/share/godot/templates
-          mv /root/.local/share/godot/templates/${{ env.GODOT_VERSION }}.stable ~/.local/share/godot/templates/${{ env.GODOT_VERSION }}.stable
+          mv /root/.local/share/godot/templates/$GODOT_VERSION.stable ~/.local/share/godot/templates/$GODOT_VERSION }}.stable
 
       #- name: Export game to web version
       #  uses: docker://ghcr.io/bcorfman/godot/export:latest
