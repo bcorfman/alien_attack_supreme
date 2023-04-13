@@ -12,7 +12,7 @@ jobs:
     name: Windows Export
     runs-on: ubuntu-latest
     container:
-      image: barichello/godot-ci:4.0.2
+      image: barichello/godot-ci:4.0.2-stable
     steps:
       - name: Checkout git repo
         uses: actions/checkout@v3
