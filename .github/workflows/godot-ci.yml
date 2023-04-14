@@ -27,7 +27,7 @@ jobs:
         with:
           files: ./build/windows/*
           repo-token: ${{ secrets.PAT }}
-
+          release-tag: v0.1
 
   export-linux:
     name: Linux Export
@@ -48,7 +48,7 @@ jobs:
         with:
           files: ./build/linux/*
           repo-token: ${{ secrets.PAT }}
-
+          release-tag: v0.1
   export-web:
     name: Web Export
     runs-on: ubuntu-latest
@@ -75,6 +75,7 @@ jobs:
         with:
           files: ./build/web/*
           repo-token: ${{ secrets.PAT }}
+          release-tag: v0.1
       - name: Deploy to GitHub Pages
         if: success() 
         uses: crazy-max/ghaction-github-pages@v3
