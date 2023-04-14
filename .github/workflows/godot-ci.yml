@@ -63,13 +63,13 @@ jobs:
           mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
       - name: Web Build
         run: godot -v --headless --export-release "Web" ./build/web/index.html
-      - name: "Workaround for SharedArrayBuffer support on GitHub Pages"
-        run: |
-          cd build/web
-          ls -l
-          wget -nv -o coi-serviceworker.js https://github.com/gzuidhof/coi-serviceworker/raw/master/coi-serviceworker.js 
-          sed -i 's#\(		<script src="index.js"></script>\)#		<script src="coi-serviceworker.js"></script>\n\1#g' index.html
-          cd ../..
+      #- name: "Workaround for SharedArrayBuffer support on GitHub Pages"
+      #  run: |
+      #    cd build/web
+      #    ls -l
+      #    wget -nv -o coi-serviceworker.js https://github.com/gzuidhof/coi-serviceworker/raw/master/coi-serviceworker.js 
+      #    sed -i 's#\(		<script src="index.js"></script>\)#		<script src="coi-serviceworker.js"></script>\n\1#g' index.html
+      #    cd ../..
       - name: Upload assets to a Release
         uses: AButler/upload-release-assets@v2.0.2
         with:
