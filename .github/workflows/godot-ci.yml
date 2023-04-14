@@ -21,7 +21,7 @@ jobs:
           mkdir -v -p build/linux build/windows build/mac build/web ~/.local/share/godot/templates
           mv /root/.local/share/godot/templates/$GODOT_VERSION.stable ~/.local/share/godot/templates/$GODOT_VERSION.stable
       - name: Windows Build
-        run: godot -v --headless --export-release "Windows Desktop" ./build/windows/$EXPORT_NAME.exe
+        run: godot -v --path godot --headless --export-release "Windows Desktop" ./build/windows/$EXPORT_NAME.exe
       - name: '📤 Upload artifact'
         uses: 'actions/upload-artifact@v3'
         with:
@@ -42,7 +42,7 @@ jobs:
           mkdir -v -p build/linux build/windows build/mac build/web ~/.local/share/godot/templates
           mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
       - name: Linux Build
-        run: godot -v --headless --export-release "Linux/X11" ./build/linux/$EXPORT_NAME.x86_64
+        run: godot -v --path godot --headless --export-release "Linux/X11" ./build/linux/$EXPORT_NAME.x86_64
       - name: '📤 Upload artifact'
         uses: 'actions/upload-artifact@v3'
         with:
@@ -62,7 +62,7 @@ jobs:
           mkdir -v -p build/linux build/windows build/mac build/web ~/.local/share/godot/templates
           mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
       - name: Web Build
-        run: godot -v --headless --export-release "Web" ./build/web/index.html
+        run: godot -v --path godot --headless --export-release "Web" ./build/web/index.html
       #- name: "Workaround for SharedArrayBuffer support on GitHub Pages"
       #  run: |
       #    cd build/web
@@ -98,7 +98,7 @@ jobs:
           mkdir -v -p build/linux build/windows build/mac build/web ~/.local/share/godot/templates
           mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
       - name: Mac Build
-        run: godot -v --headless --export-release "MacOS" ./build/mac/$EXPORT_NAME.zip
+        run: godot -v --path godot --headless --export-release "MacOS" ./build/mac/$EXPORT_NAME.zip
       - name: '📤 Upload artifact'
         uses: 'actions/upload-artifact@v3'
         with:
