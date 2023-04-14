@@ -103,4 +103,4 @@ jobs:
         with:
           files: ./build/mac/*
           repo-token: ${{ secrets.PAT }}
-          tag: v0.1
+          release-tag: v0.1
