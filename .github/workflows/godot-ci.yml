@@ -26,7 +26,7 @@ jobs:
         uses: 'actions/upload-artifact@v3'
         with:
           name: Windows
-          path: build/windows/*
+          path: ./build/windows/*
           if-no-files-found: error
 
   export-linux:
@@ -47,7 +47,7 @@ jobs:
         uses: 'actions/upload-artifact@v3'
         with:
           name: Linux
-          path: build/linux/*
+          path: ./build/linux/*
           if-no-files-found: error
   export-web:
     name: Web Export
@@ -74,14 +74,14 @@ jobs:
         uses: 'actions/upload-artifact@v3'
         with:
           name: Web
-          path: build/web/*
+          path: ./build/web/*
           if-no-files-found: error
       - name: Deploy to GitHub Pages
         if: success() 
         uses: crazy-max/ghaction-github-pages@v3
         with:
           target_branch: gh-pages
-          build_dir: build/web
+          build_dir: ./build/web
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
 
@@ -103,5 +103,5 @@ jobs:
         uses: 'actions/upload-artifact@v3'
         with:
           name: Mac
-          path: build/mac/*
+          path: ./build/mac/*
           if-no-files-found: error
