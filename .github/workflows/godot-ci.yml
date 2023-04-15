@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.3.0
       - name: Export
         id: export
         uses: firebelley/godot-export@v5.0.0
@@ -25,31 +25,39 @@ jobs:
           relative_project_path: ${{ env.PROJECT_PATH}}
           use_preset_export_path: false
           relative_export_path: ${{ env.EXPORT_PATH }}
-      - name: Upload Windows Artifact
-        uses: actions/upload-artifact@v3
+          archive_output: true
+      #- name: Upload Windows Artifact
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: ${{ env.GAME_NAME }}.${{ github.ref_name }}.windows
+      #    path: ${{ steps.export.outputs.archive_directory }}/Windows
+      #- name: Upload MacOS Artifact
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: ${{ env.GAME_NAME }}.${{ github.ref_name }}.mac
+      #    path: ${{ steps.export.outputs.archive_directory }}/Mac
+      #- name: Upload Linux Artifact
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: ${{ env.GAME_NAME }}.${{ github.ref_name }}.linux
+      #    path: ${{ steps.export.outputs.archive_directory }}/Linux
+      #- name: Upload Web Artifact
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: ${{ env.GAME_NAME }}.${{ github.ref_name }}.web
+      #    path: ${{ steps.export.outputs.archive_directory }}/Web
+      #- name: Deploy to GitHub Pages
+      #  if: success() 
+      #  uses: crazy-max/ghaction-github-pages@v3
+      #  with:
+      #    target_branch: gh-pages
+      #    build_dir: ${{ steps.export.outputs.archive_directory }}/Web
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.PAT }}
+      - name: create release
+        uses: ncipollo/release-action@v1.11.2
         with:
-          name: ${{ env.GAME_NAME }}.${{ github.ref_name }}.windows
-          path: ${{ steps.export.outputs.build_directory }}/Windows
-      - name: Upload MacOS Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.GAME_NAME }}.${{ github.ref_name }}.mac
-          path: ${{ steps.export.outputs.build_directory }}/Mac
-      - name: Upload Linux Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.GAME_NAME }}.${{ github.ref_name }}.linux
-          path: ${{ steps.export.outputs.build_directory }}/Linux
-      - name: Upload Web Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.GAME_NAME }}.${{ github.ref_name }}.web
-          path: ${{ steps.export.outputs.build_directory }}/Web
-      - name: Deploy to GitHub Pages
-        if: success() 
-        uses: crazy-max/ghaction-github-pages@v3
-        with:
-          target_branch: gh-pages
-          build_dir: ${{ steps.export.outputs.build_directory }}/Web
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          token: ${{ secrets.PAT }}
+          generateReleaseNotes: true
+          tag: "0.1"
+          artifacts: ${{ steps.export.outputs.archive_directory }}/* # Added "/*" at the end is glob pattern match for this action
