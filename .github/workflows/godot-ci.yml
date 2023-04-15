@@ -62,7 +62,7 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           generateReleaseNotes: true
-          tag: "0.1"
+          tag: ${{ github.ref_name }}
           artifacts: ${{ steps.export.outputs.archive_directory }}/* # Added "/*" at the end is glob pattern match for this action
   
   pages-deploy:
