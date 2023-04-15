@@ -6,6 +6,7 @@ on: push
 env:
   GAME_NAME: alien_attack_supreme
   PROJECT_PATH: "./godot/"
+  EXPORT_PATH: "./builds"
   GODOT_VERSION: "4.0.2"
 
 jobs:
@@ -22,7 +23,8 @@ jobs:
           godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/${{env.GODOT_VERSION}}/Godot_v${{env.GODOT_VERSION}}-stable_linux.x86_64.zip
           godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/${{env.GODOT_VERSION}}/Godot_v${{env.GODOT_VERSION}}-stable_export_templates.tpz
           relative_project_path: ${{ env.PROJECT_PATH}}
-          use_preset_export_path: true
+          use_preset_export_path: false
+          relative_export_path: ${{ env.EXPORT_PATH }}
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v3
         with:
