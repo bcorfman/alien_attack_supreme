@@ -76,7 +76,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Web.zip
-          path: ${{ env.EXPORT_PATH }}
+          path: ${{ steps.export.outputs.archive_directory }}
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
