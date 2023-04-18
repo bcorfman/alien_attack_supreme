@@ -43,12 +43,12 @@ jobs:
         echo "New project.godot contents:"
         cat ${{ github.workspace }}/godot/project.godot
 
-    - name: install wine
-      id: wine_install
-      run: |
-        brew tap homebrew/cask-versions
-        brew install --cask --no-quarantine wine-stable
-        echo "WINE_PATH=$(which wine64)" >> $GITHUB_OUTPUT
+    #- name: install wine
+    #  id: wine_install
+    #  run: |
+    #    brew tap homebrew/cask-versions
+    #    brew install --cask --no-quarantine wine-stable
+    #    echo "WINE_PATH=$(which wine64)" >> $GITHUB_OUTPUT
 
     - name: export game
       id: export
