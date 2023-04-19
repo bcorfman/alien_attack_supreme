@@ -65,7 +65,7 @@ jobs:
 
     - name: unzip web artifact
       run: |
-        ls -la
+        ls -la ${{ steps.export.outputs.archive_directory }}
         zip -uj ${{ steps.export.outputs.archive_directory }}/Web.zip ${{ github.workspace }}/Build/Web/*
 
     - name: "Workaround for SharedArrayBuffer support on GitHub Pages"
