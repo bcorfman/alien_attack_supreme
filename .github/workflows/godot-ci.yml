@@ -63,23 +63,34 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
 
-    #- name: repack web artifact
-    #  run: |
-    #    zip -uj ${{ steps.export.outputs.archive_directory }}/web.zip ${{ github.workspace }}/Build/Web/*
-    #    cp ${{ github.workspace }}/Build/Web/* ${{ steps.export.outputs.build_directory }}/web/
+    - name: unzip web artifact
+      run: |
+        zip -uj ${{ steps.export.outputs.archive_directory }}/web.zip ${{ github.workspace }}/Build/Web/*
 
-    #- uses: actions/upload-artifact@v3
-    #  with:
-    #    name: youtd-${{ env.TAG_VERSION }}
-    #    path: ${{ steps.export.outputs.archive_directory }}/*.zip
-    #    if-no-files-found: error
+    - name: "Workaround for SharedArrayBuffer support on GitHub Pages"
+      run: |
+        cd Build/Web
+        ls -l
+        wget -nv -o coi-serviceworker.js https://github.com/gzuidhof/coi-serviceworker/raw/master/coi-serviceworker.js 
+        sed -i 's#\(		<script src="index.js"></script>\)#		<script src="coi-serviceworker.js"></script>\n\1#g' index.html
+        cd ../..
+    
+    - name: copy files for upload
+      run: cp ${{ github.workspace }}/Build/Web/* ${{ steps.export.outputs.build_directory }}/web/
 
-    #- name: deploy to github pages
-    #  if: steps.export.outcome == 'success'
-    #  uses: peaceiris/actions-gh-pages@v3
-    #  with:
-    #    github_token: ${{ secrets.PAT }}
-    #    publish_dir: ${{ steps.export.outputs.build_directory }}/web
+    - name: upload repackaged web artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: alien-attack-${{ env.TAG_VERSION }}
+        path: ${{ steps.export.outputs.archive_directory }}/*.zip
+        if-no-files-found: error
+
+    - name: deploy to github pages
+      if: steps.export.outcome == 'success'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.PAT }}
+        publish_dir: ${{ steps.export.outputs.build_directory }}/web
 
     #outputs:
     #  tag_version: ${{ env.TAG_VERSION }}
